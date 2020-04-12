@@ -6,6 +6,8 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
+const tasks = require('./routes/tasks')
+
 const index = require('./routes/index')
 const users = require('./routes/users')
 require('./store').init()
@@ -19,6 +21,8 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
+
+app.use(tasks.routes(), tasks.allowedMethods())
 
 app.use(views(__dirname + '/views', {
   extension: 'pug'
