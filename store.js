@@ -3,21 +3,6 @@ const service = storage.createTableService()
 const table = 'tasks'
 const uuid = require('uuid')
 
-const updateTaskStatus = async (id, status) => (
-  new Promise((resolve, reject) => {
-    const generator = storage.TableUtilities.entityGenerator
-    const task = {
-      PartitionKey: generator.String('task'),
-      RowKey: generator.String(id),
-      status
-    }
-
-    service.mergeEntity(table, task, (error, result, response) => {
-      !error ? resolve() : reject()
-    })
-  })
-)
-
 const init = async () => (
   new Promise((resolve, reject) => {
     service.createTableIfNotExists(table, (error, result, response) => {
@@ -58,6 +43,21 @@ const listTasks = async () => (
   })
 )
 
+const updateTaskStatus = async (id, status) => (
+  new Promise((resolve, reject) => {
+    const generator = storage.TableUtilities.entityGenerator
+    const task = {
+      PartitionKey: generator.String('task'),
+      RowKey: generator.String(id),
+      status
+    }
+
+    service.mergeEntity(table, task, (error, result, response) => {
+      !error ? resolve() : reject()
+    })
+  })
+)
+
 
 module.exports = {
   init,
@@ -65,3 +65,4 @@ module.exports = {
   listTasks,
   updateTaskStatus
 }
+
